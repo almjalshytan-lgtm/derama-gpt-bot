@@ -4,18 +4,18 @@ import os
 import sys
 
 # قراءة المفاتيح من Environment Variables
-8550956934:AAFKfQLioynxsFWJQDeREPPtM0Fy8cAj7M4 = os.environ.get("BOT_TOKEN")
-AIzaSyDzlsgt9Vl1oz9f-TbxtjVmwk-q5ReD-8U = os.environ.get("GEMINI_API_KEY")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 if not BOT_TOKEN or not GEMINI_API_KEY:
     print("❌ Missing environment variables")
     sys.exit(1)
 
 # تهيئة البوت
-bot = telebot.TeleBot(BOT_TOKEN)
+bot = telebot.TeleBot(8550956934:AAFKfQLioynxsFWJQDeREPPtM0Fy8cAj7M4)
 
 # تهيئة Gemini
-genai.configure(api_key=GEMINI_API_KEY)
+genai.configure(AIzaSyDzlsgt9Vl1oz9f-TbxtjVmwk-q5ReD-8U)
 
 model = genai.GenerativeModel(
     model_name="models/gemini-1.5-flash",
