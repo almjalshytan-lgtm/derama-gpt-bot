@@ -12,11 +12,10 @@ if not BOT_TOKEN or not GEMINI_API_KEY:
     sys.exit(1)
 
 # تهيئة البوت
-bot = telebot.TeleBot(8550956934:AAFKfQLioynxsFWJQDeREPPtM0Fy8cAj7M4)
+bot = telebot.TeleBot("8550956934:AAFKfQLioynxsFWJQDeREPPtM0Fy8cAj7M4")
 
 # تهيئة Gemini
-genai.configure(AIzaSyDzlsgt9Vl1oz9f-TbxtjVmwk-q5ReD-8U)
-
+genai.configure(api_key="AIzaSyDzlsgt9Vl1oz9f-TbxtjVmwk-q5ReD-8U")
 model = genai.GenerativeModel(
     model_name="models/gemini-1.5-flash",
     generation_config={
