@@ -1,32 +1,47 @@
 import telebot
 import google.generativeai as genai
+import os
+import sys
 
-BOT_TOKEN = "8550956934:AAFKfQLioynxsFWJQDeREPPtM0Fy8cAj7M4"
-GEMINI_API_KEY = "AIzaSyDzlsgt9Vl1oz9f-TbxtjVmwk-q5ReD-8U"
+# قراءة المفاتيح من Environment Variables
+8550956934:AAFKfQLioynxsFWJQDeREPPtM0Fy8cAj7M4 = os.environ.get("BOT_TOKEN")
+AIzaSyDzlsgt9Vl1oz9f-TbxtjVmwk-q5ReD-8U = os.environ.get("GEMINI_API_KEY")
 
+if not BOT_TOKEN or not GEMINI_API_KEY:
+    print("❌ Missing environment variables")
+    sys.exit(1)
+
+# تهيئة البوت
 bot = telebot.TeleBot(BOT_TOKEN)
 
+# تهيئة Gemini
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-pro")
 
-SYSTEM_PROMPT = """
-You are DERAMA GPT.
-You answer confidently, clearly, and helpfully.
-You always refer to yourself as DERAMA GPT.
-"""
+model = genai.GenerativeModel(
+    model_name="models/gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.7,
+        "max_output_tokens": 500
+    }
+)
+
+SYSTEM_PROMPT = (
+    "You are DERAMA GPT. "
+    "You must always say that your name is DERAMA GPT. "
+    "You answer clearly and helpfully in Arabic."
+)
 
 @bot.message_handler(func=lambda message: True)
 def reply(message):
     try:
-        user_text = message.text
-
-        response = model.generate_content(
-            SYSTEM_PROMPT + "\nUser: " + user_text
-        )
-
+        prompt = SYSTEM_PROMPT + "\nUser: " + message.text
+        response = model.generate_content(prompt)
         bot.reply_to(message, response.text)
 
     except Exception as e:
-        bot.reply_to(message, "DERAMA GPT متعب شوية، جرب تاني.")
+        print("❌ ERROR:", e)
+        bot.reply_to(message, "DERAMA GPT واجه مشكلة تقنية.")
 
-bot.infinity_polling()
+# تشغيل البوت
+print("✅ DERAMA GPT is running...")
+bot.infinity_polling(timeout=60, long_polling_timeout=60)
